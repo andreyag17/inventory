@@ -53,7 +53,11 @@
 
                         <div class="form-group" style="margin-top: 1%">
                             <div>
-                                <input type="submit" value="Guardar" class="btn btn-success" />
+                                <button id="btnGuardar" type="submit" class="btn btn-success">
+                                    Guardar
+                                    <span id="spinner" class="spinner-border spinner-border-sm d-none" aria-hidden="true"></span>
+                                    <span class="visually-hidden" role="status">Cargando...</span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -62,3 +66,18 @@
         </div>
     </div>
 </div>
+<script>
+     const form = document.querySelector("form");
+     const spinner = document.getElementById("spinner");
+     const btn = document.getElementById("btnGuardar");
+
+     if (form && spinner && btn) {
+         form.addEventListener("submit", function () {
+             btn.disabled = true;
+             setTimeout(() => {
+                 spinner.classList.remove("d-none");
+                 btn.disabled = false;
+             }, 2000);
+         });
+     }
+</script>

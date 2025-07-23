@@ -125,6 +125,7 @@ namespace appInventory.Controllers
         }
 
         // GET: producto/Create
+        // Crea los productos, agrega estos a Lista de inventario
         public ActionResult Create()
         {
             {
@@ -142,26 +143,28 @@ namespace appInventory.Controllers
         }
 
         // POST: producto/Create
-        // Crea los productos, agrega estos a Lista de inventario
+        // Crea producto para agregarlo a Lista de inventario
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "codigoProducto,nombreProducto,cantidad,categoriaId")] producto producto)
         {
-
-            if (ModelState.IsValid)
+            try
             {
-                db.producto.Add(producto);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    db.producto.Add(producto);
+                    db.SaveChanges();
+                    return RedirectToAction("Index", new { mensaje = "✅ Creado correctamente." });
+                }
+                ViewBag.categoriaId = new SelectList(db.categoria, "categoriaId", "nombreCategoria", producto.categoriaId);
+                return View(producto);
             }
-
-            ViewBag.categoriaId = new SelectList(db.categoria, "categoriaId", "nombreCategoria", producto.categoriaId);
-            return View(producto);
-
+            catch (Exception)
+            {
+                ViewBag.crearError = "⚠️ Error al crear.";
+                throw;
+            }
         }
-
-        // GET: producto/Edit/5
-        // Redirecciona a editar
         public ActionResult Edit(string id)
         {
 
@@ -204,7 +207,7 @@ namespace appInventory.Controllers
             }
             catch (Exception)
             {
-                ViewBag.EditarError = "⚠️ Usuario o contraseña incorrectos.";
+                ViewBag.EditarError = "⚠️ Error al guardar.";
                 throw;
             }
         }
