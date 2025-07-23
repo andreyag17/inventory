@@ -1,5 +1,7 @@
 ﻿using appInventory.Models;
+using appInventory.Models.ViewModel;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -7,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Services.Description;
 using System.Web.UI.WebControls.WebParts;
 
 namespace appInventory.Controllers
@@ -16,10 +19,17 @@ namespace appInventory.Controllers
         private inventoryEntities db = new inventoryEntities();
 
         // GET: producto
-        public ActionResult Index()
+        public ActionResult Index(string mensaje)
         {
             if (Session["usuario"] != null)
             {
+
+                if (mensaje != null)
+{
+                    ViewBag.EditarMensaje = mensaje;
+
+                    mensaje = null;
+                }
                 var producto = db.producto.Include(p => p.categoria);
                 return View(producto.ToList());
 
@@ -44,7 +54,6 @@ namespace appInventory.Controllers
             }
         }
 
-        //No sirve y no se porque
         public ActionResult SalidaM()
         {
             if (Session["usuario"] != null)
@@ -79,7 +88,6 @@ namespace appInventory.Controllers
             {
                 productos = productos.Where(p => p.categoria.nombreCategoria.Contains(tipoProducto));
             }
-            //return View(productos.ToList());
             return View("Index", productos.ToList());
         }
 
@@ -99,7 +107,7 @@ namespace appInventory.Controllers
                         var movimiento = db.movimiento
                             .Include(m => m.producto)
                             .Include(m => m.usuario)
-                            .FirstOrDefault(m => m.idCodigo == id); // Usa FirstOrDefault con Include
+                            .FirstOrDefault(m => m.idCodigo == id);
 
                         if (movimiento == null)
                         {
@@ -134,8 +142,7 @@ namespace appInventory.Controllers
         }
 
         // POST: producto/Create
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
-        // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
+        // Crea los productos, agrega estos a Lista de inventario
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "codigoProducto,nombreProducto,cantidad,categoriaId")] producto producto)
@@ -154,6 +161,7 @@ namespace appInventory.Controllers
         }
 
         // GET: producto/Edit/5
+        // Redirecciona a editar
         public ActionResult Edit(string id)
         {
 
@@ -175,23 +183,34 @@ namespace appInventory.Controllers
         }
 
         // POST: producto/Edit/5
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
-        // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
+        //Guarda los cambios realizados en Editar producto
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "codigoProducto,nombreProducto,cantidad,categoriaId")] producto producto)
+        public ActionResult Edit(producto model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Entry(producto).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    var producto = db.producto.Find(model.codigoProducto);
+                    producto.nombreProducto = model.nombreProducto;
+                    producto.categoriaId = model.categoriaId;
+                    db.SaveChanges();
+
+                    return RedirectToAction("Index", new { mensaje = "✅ Editado correctamente." });
+                }
+                ViewBag.categoriaId = new SelectList(db.categoria, "categoriaId", "nombreCategoria", model.categoriaId);
+                return View(model);
             }
-            ViewBag.categoriaId = new SelectList(db.categoria, "categoriaId", "nombreCategoria", producto.categoriaId);
-            return View(producto);
+            catch (Exception)
+            {
+                ViewBag.EditarError = "⚠️ Usuario o contraseña incorrectos.";
+                throw;
+            }
         }
 
         //Put: Actualizar/Cantidad
+        // Actualiza la cantidad que se ingreso desde ingreso de movimiento
         [HttpPut]
         public void Actualizar(string id, int cantidad)
         {
@@ -199,32 +218,6 @@ namespace appInventory.Controllers
             prod.cantidad += cantidad;
             db.Entry(prod).State = EntityState.Modified;
             db.SaveChanges();
-        }
-
-        // GET: producto/Delete/5
-        public ActionResult Delete(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            producto producto = db.producto.Find(id);
-            if (producto == null)
-            {
-                return HttpNotFound();
-            }
-            return View(producto);
-        }
-
-        // POST: producto/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string id)
-        {
-            producto producto = db.producto.Find(id);
-            db.producto.Remove(producto);
-            db.SaveChanges();
-            return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)

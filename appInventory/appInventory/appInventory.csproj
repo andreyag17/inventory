@@ -122,6 +122,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\gestionUsuariosController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\Mensaje.cs" />
     <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\movimientoController.cs" />
     <Compile Include="Controllers\productoController.cs" />

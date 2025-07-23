@@ -20,15 +20,11 @@ namespace appInventory.Models
         {
             this.movimiento = new HashSet<movimiento>();
         }
-        [Required(ErrorMessage = "El código es obligatorio.")]
         public string codigoProducto { get; set; }
-        [Required(ErrorMessage = "El nombre del producto es obligatorio.")]
 
         public string nombreProducto { get; set; }
-        [Required(ErrorMessage = "La cantidad es obligatorio.")]
 
         public Nullable<int> cantidad { get; set; }
-        [Required(ErrorMessage = "La categoria es obligatorio.")]
 
         public string categoriaId { get; set; }
     

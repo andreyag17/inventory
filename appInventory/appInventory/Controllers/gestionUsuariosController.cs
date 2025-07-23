@@ -111,6 +111,7 @@ namespace appInventory.Controllers
             }
             ViewBag.rol_Id = new SelectList(db.rol, "rol_Id", "rolNombre", usuario.rol_Id);
             return View(usuario);
+            //Haora
         }
 
         // POST: gestionUsuarios/Edit/5
@@ -124,11 +125,11 @@ namespace appInventory.Controllers
             {
                 var usuario = db.usuario.Find(model.usuarioId);
                 usuario.nombre = model.nombre;
-                usuario.nombre = model.apellido1;
-                usuario.nombre = model.apellido2;
-                usuario.nombre = model.correoElectronico;
-                usuario.nombre = model.nombreUsuario;
-                usuario.nombre = model.rol_Id.ToString();
+                usuario.apellido1 = model.apellido1;
+                usuario.apellido2 = model.apellido2;
+                usuario.correoElectronico = model.correoElectronico;
+                usuario.nombreUsuario = model.nombreUsuario;
+                usuario.rol_Id = model.rol_Id;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

@@ -6,8 +6,15 @@
 }
 <div class="overlayPanel">
     <div class="row">
+        @if (ViewBag.EditarMensaje != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
+                @ViewBag.EditarMensaje
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
         <div style="text-align:left;">
-            <a href="@Url.Action("Index", "gestionUsuarios")"> <p class="fa fa-arrow-left fa-2x" aria-hidden="true" style="color:black;" btn></p></a>
+            <a href="@Url.Action("Index", "producto")"> <p class="fa fa-arrow-left fa-2x" aria-hidden="true" style="color:black;" btn></p></a>
         </div>
         <div class="container mt-2">
             <h1>Editar producto</h1>
@@ -26,7 +33,7 @@
                             <div class="form-group">
                                 <label>Nombre del producto</label>
                                 <div>
-                                    @Html.EditorFor(model => model.nombreProducto, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.EditorFor(model => model.nombreProducto, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                                     @Html.ValidationMessageFor(model => model.nombreProducto, "", new { @class = "text-danger" })
                                 </div>
                             </div>
@@ -38,7 +45,7 @@
                             <div class="form-group">
                                 <label>Categoria</label>
                                 <div>
-                                    @Html.DropDownList("categoriaId", null, htmlAttributes: new { @class = "form-control" })
+                                    @Html.DropDownList("categoriaId", null, htmlAttributes: new { @class = "form-control", required = "required" })
                                     @Html.ValidationMessageFor(model => model.categoriaId, "", new { @class = "text-danger" })
                                 </div>
                             </div>

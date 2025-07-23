@@ -4,16 +4,37 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Menu/Menu.cshtml";
 }
+
+
 <div class="overlayPanelListas" style="margin-top: 10%">
     <div class="row">
+        
         <div style="text-align:left;">
             <a href="@Url.Action("PaginaPrincipal", "Menu")"> <p class="fa fa-arrow-left fa-2x" aria-hidden="true" style="color: black;" btn> </p></a>
         </div>
         <div class="container mt-2">
             <h2 class="mb-4">Lista de inventario</h2>
+
+            @if (ViewBag.EditarMensaje != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
+                    @ViewBag.EditarMensaje
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <script>
+                    setTimeout(function () {
+                        var alertElement = document.querySelector('.alert');
+                        if (alertElement) {
+                            var alert = bootstrap.Alert.getOrCreateInstance(alertElement);
+                            alert.close();
+                        }
+                    }, 2000);
+                </script>
+            }
             <div class="row">
                 <div class="col-lg-6" style="display:flex;">
                     <p style="text-align:left">
+
                         @Html.ActionLink("Crear producto", "Create", null, new { @class = "btn btn-primary" })
                     </p>
                     <p style="text-align: left; margin-left:10px">
@@ -36,11 +57,11 @@
                                     <i class="fa fa-search"></i>
                                 </button>
                                 @*<select class="form-select" style="margin-left: 5px" name="Buscador" id="Buscador">
-                                            <option value="codProducto">Código de producto</option>
-                                            <option value="nomProducto">Nombre del producto</option>
-                                            <option value="tipoProducto">Tipo del producto</option>
+                                    <option value="codProducto">Código de producto</option>
+                                    <option value="nomProducto">Nombre del producto</option>
+                                    <option value="tipoProducto">Tipo del producto</option>
 
-                                    </select>*@
+                            </select>*@
                             </div>
                         </div>
                     }
