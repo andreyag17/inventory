@@ -242,9 +242,7 @@
     <Content Include="Views\Menu\Menu.cshtml" />
     <Content Include="Views\Menu\PaginaPrincipal.cshtml" />
     <Content Include="Views\movimiento\Create.cshtml" />
-    <Content Include="Views\movimiento\Delete.cshtml" />
     <Content Include="Views\movimiento\Details.cshtml" />
-    <Content Include="Views\movimiento\Edit.cshtml" />
     <Content Include="Views\movimiento\Index.cshtml" />
     <Content Include="Views\producto\Create.cshtml" />
     <Content Include="Views\producto\Delete.cshtml" />

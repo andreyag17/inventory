@@ -18,13 +18,10 @@ namespace appInventory.Controllers
         // GET: movimiento
         public ActionResult Index()
         {
-            
-
             if (Session["usuario"] != null)
             {
                 var movimiento = db.movimiento.Include(m => m.producto).Include(m => m.usuario);
                 return View(movimiento.ToList());
-
             }
             else
             {
@@ -33,6 +30,7 @@ namespace appInventory.Controllers
         }
 
         //GET: buscador
+        //Busca entre los movimientos siertos parametros
         [HttpPost]
         public ActionResult BuscadorMovimiento(string nombreProducto, string tipoMovimiento, string Registradox)
         {
@@ -57,6 +55,7 @@ namespace appInventory.Controllers
         }
 
         // GET: movimiento/Details/5
+        //Muestra los detalles de un producto en especifico
         public ActionResult Details(string id)
         {
             if (id == null)
@@ -71,6 +70,7 @@ namespace appInventory.Controllers
             return View(movimiento);
         }
 
+        //Genera una entrada, suma de cantidad en productos y además muestra una fecha para que los usuarios administradores observen cuantas entradas se realizan
         // GET: movimiento/Create
         public ActionResult Create()
         {
@@ -91,30 +91,8 @@ namespace appInventory.Controllers
             }
         }
 
-        
-
-        // GET: movimiento/Salida
-        public ActionResult Salida()
-        {
-            if (Session["usuario"] != null)
-            {
-                ViewBag.codigoProducto = new SelectList(db.producto, "codigoProducto", "nombreProducto");
-                var modelo = new movimiento
-                {
-                    fechaSalida = DateTime.Now
-                };
-                return View(modelo);
-
-            }
-            else
-            {
-                return RedirectToAction("Login", "Usuario");
-            }
-        }
-
+        //Genera una salida, resta de cantidad en productos y además muestra una fecha para que los usuarios administradores observen cuantas salidas se realizan
         // POST: movimiento/Create
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
-        // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "idCodigo,codigoProducto,fechaVencimiento,fechaIngreso,fechaSalida,creacionRegistro,cantidad,tipoMovimiento,usuarioId")] movimiento movimiento)
@@ -137,6 +115,25 @@ namespace appInventory.Controllers
             ViewBag.usuarioId = new SelectList(db.usuario, "usuarioId", "nombre", movimiento.usuarioId);
             return View(movimiento);
         }
+        // GET: movimiento/Salida
+        public ActionResult Salida()
+        {
+            if (Session["usuario"] != null)
+            {
+                ViewBag.codigoProducto = new SelectList(db.producto, "codigoProducto", "nombreProducto");
+                var modelo = new movimiento
+                {
+                    fechaSalida = DateTime.Now
+                };
+                return View(modelo);
+            }
+            else
+            {
+                return RedirectToAction("Login", "Usuario");
+            }
+        }
+
+        // POST: movimiento/Salida
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Salida ([Bind(Include = "idCodigo,codigoProducto,fechaVencimiento,fechaIngreso,fechaSalida,creacionRegistro,cantidad,tipoMovimiento,usuarioId")] movimiento movimiento)
@@ -158,67 +155,6 @@ namespace appInventory.Controllers
             ViewBag.codigoProducto = new SelectList(db.producto, "codigoProducto", "nombreProducto", movimiento.codigoProducto);
             ViewBag.usuarioId = new SelectList(db.usuario, "usuarioId", "nombre", movimiento.usuarioId);
             return View(movimiento);
-        }
-
-        // GET: movimiento/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            movimiento movimiento = db.movimiento.Find(id);
-            if (movimiento == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.codigoProducto = new SelectList(db.producto, "codigoProducto", "nombreProducto", movimiento.codigoProducto);
-            ViewBag.usuarioId = new SelectList(db.usuario, "usuarioId", "nombre", movimiento.usuarioId);
-            return View(movimiento);
-        }
-
-        // POST: movimiento/Edit/5
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
-        // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "idCodigo,codigoProducto,fechaVencimiento,fechaIngreso,fechaSalida,creacionRegistro,cantidad,tipoMovimiento,usuarioId")] movimiento movimiento)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(movimiento).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.codigoProducto = new SelectList(db.producto, "codigoProducto", "nombreProducto", movimiento.codigoProducto);
-            ViewBag.usuarioId = new SelectList(db.usuario, "usuarioId", "nombre", movimiento.usuarioId);
-            return View(movimiento);
-        }
-
-        // GET: movimiento/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            movimiento movimiento = db.movimiento.Find(id);
-            if (movimiento == null)
-            {
-                return HttpNotFound();
-            }
-            return View(movimiento);
-        }
-
-        // POST: movimiento/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            movimiento movimiento = db.movimiento.Find(id);
-            db.movimiento.Remove(movimiento);
-            db.SaveChanges();
-            return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
