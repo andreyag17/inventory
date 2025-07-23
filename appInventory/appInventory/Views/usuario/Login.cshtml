@@ -1,0 +1,105 @@
+﻿@{
+    ViewBag.Title = "Inicio de sesión";
+
+    Layout = null;
+
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+
+    <title>Inicio de sesión</title>
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/Site.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+</head>
+
+
+<body>
+    <div class="overlay">
+        <div class="row">
+            @if (ViewBag.LoginError != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
+                    @ViewBag.LoginError
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+            <div class="col-md-8 col-sm-8 col-xl-8">
+
+                @using (Html.BeginForm("Login", "Usuario", FormMethod.Post, new { @autocomplete = "off" }))
+                {
+                    <div class="form-group">
+                        <label for="Username">Usuario</label>
+                        <input type="text" class="form-control" id="Username" name="Username" placeholder="Ingrese su usuario" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="Password">Contraseña</label>
+
+                        <div class="input-group-append" style="display:flex">
+                            <input type="password" class="form-control" id="Password" name="Password" placeholder="Ingrese su contraseña" required />
+                            <button class="btn btn-outline-secondary" id="btnPassword" type="button" >
+                                <i class="fa fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="margin-left: 25%">
+                        <button id="btnIngresar" type="submit" class="btn btn-success btn-block mt-3">
+                            Ingresar
+                            <span id="spinner" class="spinner-border spinner-border-sm d-none" aria-hidden="true"></span>
+                            <span class="visually-hidden" role="status">Cargando...</span>
+                        </button>
+                    </div>
+                }
+            </div>
+
+            <div class="col-md-4 d-flex align-items-center justify-content-center">
+                <img src="~/Imagenes/iconoUsuario.png" style="width: 100%" />
+            </div>
+
+
+        </div>
+    </div>
+
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById("btnPassword").addEventListener("click", function () {
+            const passwordInput = document.getElementById("Password");
+            const icon = this.querySelector("i");
+
+            const isPassword = passwordInput.type === "password";
+            passwordInput.type = isPassword ? "text" : "password";
+
+            icon.classList.toggle("fa-eye");
+            icon.classList.toggle("fa-eye-slash");
+        });
+
+    </script>
+
+    @if (Session["usuario"] == null)
+    {
+        <script>
+            const form = document.querySelector("form");
+            const spinner = document.getElementById("spinner");
+            const btn = document.getElementById("btnIngresar");
+
+            if (form && spinner && btn) {
+                form.addEventListener("submit", function () {
+                    btn.disabled = true;
+                    setTimeout(() => {
+                        spinner.classList.remove("d-none");
+                        btn.disabled = false; 
+                    }, 2000);
+                });
+            }
+        </script>
+    }
+
+</body>
+</html>

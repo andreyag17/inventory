@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewBag.Title = "PaginaPrincipal";
+    Layout = "~/Views/Menu/Menu.cshtml";
+}
+
+<div style="display: flex; justify-content: center; margin-top: 20%;">
+    @if (Session["usuario"] != null)
+    {
+
+        var user = (appInventory.Models.usuario)Session["usuario"];
+        <h1 style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serifend; padding: 10px; color: #e9ebe6">¡Bienvenido @user.nombre!</h1>
+
+    }
+</div>
+

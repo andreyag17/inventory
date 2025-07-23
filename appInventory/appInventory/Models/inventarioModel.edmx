@@ -1,0 +1,407 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="inventoryModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="categoria">
+          <Key>
+            <PropertyRef Name="categoriaId" />
+          </Key>
+          <Property Name="categoriaId" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="nombreCategoria" Type="varchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="ingresoUsuario">
+          <Key>
+            <PropertyRef Name="ingresosId" />
+          </Key>
+          <Property Name="ingresosId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="usuarioId" Type="int" />
+          <Property Name="fecha" Type="datetime" />
+        </EntityType>
+        <EntityType Name="movimiento">
+          <Key>
+            <PropertyRef Name="idCodigo" />
+          </Key>
+          <Property Name="idCodigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="codigoProducto" Type="varchar" MaxLength="150" />
+          <Property Name="fechaVencimiento" Type="datetime" />
+          <Property Name="fechaIngreso" Type="datetime" />
+          <Property Name="fechaSalida" Type="datetime" />
+          <Property Name="creacionRegistro" Type="datetime" />
+          <Property Name="cantidad" Type="int" />
+          <Property Name="tipoMovimiento" Type="int" />
+          <Property Name="usuarioId" Type="int" />
+        </EntityType>
+        <EntityType Name="producto">
+          <Key>
+            <PropertyRef Name="codigoProducto" />
+          </Key>
+          <Property Name="codigoProducto" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="nombreProducto" Type="varchar" MaxLength="150" />
+          <Property Name="cantidad" Type="int" />
+          <Property Name="categoriaId" Type="varchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="rol">
+          <Key>
+            <PropertyRef Name="rol_Id" />
+          </Key>
+          <Property Name="rol_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="rolNombre" Type="varchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="usuario">
+          <Key>
+            <PropertyRef Name="usuarioId" />
+          </Key>
+          <Property Name="usuarioId" Type="int" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="150" />
+          <Property Name="apellido1" Type="varchar" MaxLength="150" />
+          <Property Name="apellido2" Type="varchar" MaxLength="150" />
+          <Property Name="correoElectronico" Type="varchar" MaxLength="150" />
+          <Property Name="nombreUsuario" Type="varchar" MaxLength="150" />
+          <Property Name="contrasennaUsuario" Type="varchar" MaxLength="150" />
+          <Property Name="rol_Id" Type="int" />
+        </EntityType>
+        <Association Name="FK_Categoria_Producto">
+          <End Role="categoria" Type="Self.categoria" Multiplicity="0..1" />
+          <End Role="producto" Type="Self.producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="categoria">
+              <PropertyRef Name="categoriaId" />
+            </Principal>
+            <Dependent Role="producto">
+              <PropertyRef Name="categoriaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IngresoUsuario_Usuario">
+          <End Role="usuario" Type="Self.usuario" Multiplicity="0..1" />
+          <End Role="ingresoUsuario" Type="Self.ingresoUsuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuario">
+              <PropertyRef Name="usuarioId" />
+            </Principal>
+            <Dependent Role="ingresoUsuario">
+              <PropertyRef Name="usuarioId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Movimeinto_Usuario">
+          <End Role="usuario" Type="Self.usuario" Multiplicity="0..1" />
+          <End Role="movimiento" Type="Self.movimiento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuario">
+              <PropertyRef Name="usuarioId" />
+            </Principal>
+            <Dependent Role="movimiento">
+              <PropertyRef Name="usuarioId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Movimiento_Producto">
+          <End Role="producto" Type="Self.producto" Multiplicity="0..1" />
+          <End Role="movimiento" Type="Self.movimiento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="producto">
+              <PropertyRef Name="codigoProducto" />
+            </Principal>
+            <Dependent Role="movimiento">
+              <PropertyRef Name="codigoProducto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Usuario_Rol">
+          <End Role="rol" Type="Self.rol" Multiplicity="0..1" />
+          <End Role="usuario" Type="Self.usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="rol">
+              <PropertyRef Name="rol_Id" />
+            </Principal>
+            <Dependent Role="usuario">
+              <PropertyRef Name="rol_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="inventoryModelStoreContainer">
+          <EntitySet Name="categoria" EntityType="Self.categoria" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ingresoUsuario" EntityType="Self.ingresoUsuario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="movimiento" EntityType="Self.movimiento" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="producto" EntityType="Self.producto" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="rol" EntityType="Self.rol" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="usuario" EntityType="Self.usuario" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Categoria_Producto" Association="Self.FK_Categoria_Producto">
+            <End Role="categoria" EntitySet="categoria" />
+            <End Role="producto" EntitySet="producto" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IngresoUsuario_Usuario" Association="Self.FK_IngresoUsuario_Usuario">
+            <End Role="usuario" EntitySet="usuario" />
+            <End Role="ingresoUsuario" EntitySet="ingresoUsuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Movimeinto_Usuario" Association="Self.FK_Movimeinto_Usuario">
+            <End Role="usuario" EntitySet="usuario" />
+            <End Role="movimiento" EntitySet="movimiento" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Movimiento_Producto" Association="Self.FK_Movimiento_Producto">
+            <End Role="producto" EntitySet="producto" />
+            <End Role="movimiento" EntitySet="movimiento" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Usuario_Rol" Association="Self.FK_Usuario_Rol">
+            <End Role="rol" EntitySet="rol" />
+            <End Role="usuario" EntitySet="usuario" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="inventoryModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="categoria">
+          <Key>
+            <PropertyRef Name="categoriaId" />
+          </Key>
+          <Property Name="categoriaId" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="nombreCategoria" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="producto" Relationship="Self.FK_Categoria_Producto" FromRole="categoria" ToRole="producto" />
+        </EntityType>
+        <EntityType Name="ingresoUsuario">
+          <Key>
+            <PropertyRef Name="ingresosId" />
+          </Key>
+          <Property Name="ingresosId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="usuarioId" Type="Int32" />
+          <Property Name="fecha" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="usuario" Relationship="inventoryModel.FK_IngresoUsuario_Usuario" FromRole="ingresoUsuario" ToRole="usuario" />
+        </EntityType>
+        <EntityType Name="movimiento">
+          <Key>
+            <PropertyRef Name="idCodigo" />
+          </Key>
+          <Property Name="idCodigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="codigoProducto" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="fechaVencimiento" Type="DateTime" Precision="3" />
+          <Property Name="fechaIngreso" Type="DateTime" Precision="3" />
+          <Property Name="fechaSalida" Type="DateTime" Precision="3" />
+          <Property Name="creacionRegistro" Type="DateTime" Precision="3" />
+          <Property Name="cantidad" Type="Int32" />
+          <Property Name="tipoMovimiento" Type="Int32" />
+          <Property Name="usuarioId" Type="Int32" />
+          <NavigationProperty Name="producto" Relationship="Self.FK_Movimiento_Producto" FromRole="movimiento" ToRole="producto" />
+          <NavigationProperty Name="usuario" Relationship="inventoryModel.FK_Movimeinto_Usuario" FromRole="movimiento" ToRole="usuario" />
+        </EntityType>
+        <EntityType Name="producto">
+          <Key>
+            <PropertyRef Name="codigoProducto" />
+          </Key>
+          <Property Name="codigoProducto" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="nombreProducto" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="cantidad" Type="Int32" />
+          <Property Name="categoriaId" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="categoria" Relationship="Self.FK_Categoria_Producto" FromRole="producto" ToRole="categoria" />
+          <NavigationProperty Name="movimiento" Relationship="Self.FK_Movimiento_Producto" FromRole="producto" ToRole="movimiento" />
+        </EntityType>
+        <EntityType Name="rol">
+          <Key>
+            <PropertyRef Name="rol_Id" />
+          </Key>
+          <Property Name="rol_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="rolNombre" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="usuario" Relationship="inventoryModel.FK_Usuario_Rol" FromRole="rol" ToRole="usuario" />
+        </EntityType>
+        <Association Name="FK_Categoria_Producto">
+          <End Role="categoria" Type="Self.categoria" Multiplicity="0..1" />
+          <End Role="producto" Type="Self.producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="categoria">
+              <PropertyRef Name="categoriaId" />
+            </Principal>
+            <Dependent Role="producto">
+              <PropertyRef Name="categoriaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Movimiento_Producto">
+          <End Role="producto" Type="Self.producto" Multiplicity="0..1" />
+          <End Role="movimiento" Type="Self.movimiento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="producto">
+              <PropertyRef Name="codigoProducto" />
+            </Principal>
+            <Dependent Role="movimiento">
+              <PropertyRef Name="codigoProducto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="inventoryEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="categoria" EntityType="Self.categoria" />
+          <EntitySet Name="ingresoUsuario" EntityType="Self.ingresoUsuario" />
+          <EntitySet Name="movimiento" EntityType="Self.movimiento" />
+          <EntitySet Name="producto" EntityType="Self.producto" />
+          <EntitySet Name="rol" EntityType="Self.rol" />
+          <AssociationSet Name="FK_Categoria_Producto" Association="Self.FK_Categoria_Producto">
+            <End Role="categoria" EntitySet="categoria" />
+            <End Role="producto" EntitySet="producto" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Movimiento_Producto" Association="Self.FK_Movimiento_Producto">
+            <End Role="producto" EntitySet="producto" />
+            <End Role="movimiento" EntitySet="movimiento" />
+          </AssociationSet>
+          <EntitySet Name="usuario" EntityType="inventoryModel.usuario" />
+          <AssociationSet Name="FK_IngresoUsuario_Usuario" Association="inventoryModel.FK_IngresoUsuario_Usuario">
+            <End Role="usuario" EntitySet="usuario" />
+            <End Role="ingresoUsuario" EntitySet="ingresoUsuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Movimeinto_Usuario" Association="inventoryModel.FK_Movimeinto_Usuario">
+            <End Role="usuario" EntitySet="usuario" />
+            <End Role="movimiento" EntitySet="movimiento" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Usuario_Rol" Association="inventoryModel.FK_Usuario_Rol">
+            <End Role="rol" EntitySet="rol" />
+            <End Role="usuario" EntitySet="usuario" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="usuario">
+          <Key>
+            <PropertyRef Name="usuarioId" />
+          </Key>
+          <Property Name="usuarioId" Type="Int32" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="apellido1" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="apellido2" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="correoElectronico" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="nombreUsuario" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="contrasennaUsuario" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="rol_Id" Type="Int32" />
+          <NavigationProperty Name="ingresoUsuario" Relationship="inventoryModel.FK_IngresoUsuario_Usuario" FromRole="usuario" ToRole="ingresoUsuario" />
+          <NavigationProperty Name="movimiento" Relationship="inventoryModel.FK_Movimeinto_Usuario" FromRole="usuario" ToRole="movimiento" />
+          <NavigationProperty Name="rol" Relationship="inventoryModel.FK_Usuario_Rol" FromRole="usuario" ToRole="rol" />
+        </EntityType>
+        <Association Name="FK_IngresoUsuario_Usuario">
+          <End Type="inventoryModel.usuario" Role="usuario" Multiplicity="0..1" />
+          <End Type="inventoryModel.ingresoUsuario" Role="ingresoUsuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuario">
+              <PropertyRef Name="usuarioId" />
+            </Principal>
+            <Dependent Role="ingresoUsuario">
+              <PropertyRef Name="usuarioId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Movimeinto_Usuario">
+          <End Type="inventoryModel.usuario" Role="usuario" Multiplicity="0..1" />
+          <End Type="inventoryModel.movimiento" Role="movimiento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuario">
+              <PropertyRef Name="usuarioId" />
+            </Principal>
+            <Dependent Role="movimiento">
+              <PropertyRef Name="usuarioId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Usuario_Rol">
+          <End Type="inventoryModel.rol" Role="rol" Multiplicity="0..1" />
+          <End Type="inventoryModel.usuario" Role="usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="rol">
+              <PropertyRef Name="rol_Id" />
+            </Principal>
+            <Dependent Role="usuario">
+              <PropertyRef Name="rol_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="inventoryModelStoreContainer" CdmEntityContainer="inventoryEntities">
+          <EntitySetMapping Name="categoria">
+            <EntityTypeMapping TypeName="inventoryModel.categoria">
+              <MappingFragment StoreEntitySet="categoria">
+                <ScalarProperty Name="categoriaId" ColumnName="categoriaId" />
+                <ScalarProperty Name="nombreCategoria" ColumnName="nombreCategoria" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ingresoUsuario">
+            <EntityTypeMapping TypeName="inventoryModel.ingresoUsuario">
+              <MappingFragment StoreEntitySet="ingresoUsuario">
+                <ScalarProperty Name="ingresosId" ColumnName="ingresosId" />
+                <ScalarProperty Name="usuarioId" ColumnName="usuarioId" />
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="movimiento">
+            <EntityTypeMapping TypeName="inventoryModel.movimiento">
+              <MappingFragment StoreEntitySet="movimiento">
+                <ScalarProperty Name="idCodigo" ColumnName="idCodigo" />
+                <ScalarProperty Name="codigoProducto" ColumnName="codigoProducto" />
+                <ScalarProperty Name="fechaVencimiento" ColumnName="fechaVencimiento" />
+                <ScalarProperty Name="fechaIngreso" ColumnName="fechaIngreso" />
+                <ScalarProperty Name="fechaSalida" ColumnName="fechaSalida" />
+                <ScalarProperty Name="creacionRegistro" ColumnName="creacionRegistro" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="tipoMovimiento" ColumnName="tipoMovimiento" />
+                <ScalarProperty Name="usuarioId" ColumnName="usuarioId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="producto">
+            <EntityTypeMapping TypeName="inventoryModel.producto">
+              <MappingFragment StoreEntitySet="producto">
+                <ScalarProperty Name="codigoProducto" ColumnName="codigoProducto" />
+                <ScalarProperty Name="nombreProducto" ColumnName="nombreProducto" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="categoriaId" ColumnName="categoriaId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="rol">
+            <EntityTypeMapping TypeName="inventoryModel.rol">
+              <MappingFragment StoreEntitySet="rol">
+                <ScalarProperty Name="rol_Id" ColumnName="rol_Id" />
+                <ScalarProperty Name="rolNombre" ColumnName="rolNombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="usuario">
+            <EntityTypeMapping TypeName="inventoryModel.usuario">
+              <MappingFragment StoreEntitySet="usuario">
+                <ScalarProperty Name="rol_Id" ColumnName="rol_Id" />
+                <ScalarProperty Name="contrasennaUsuario" ColumnName="contrasennaUsuario" />
+                <ScalarProperty Name="nombreUsuario" ColumnName="nombreUsuario" />
+                <ScalarProperty Name="correoElectronico" ColumnName="correoElectronico" />
+                <ScalarProperty Name="apellido2" ColumnName="apellido2" />
+                <ScalarProperty Name="apellido1" ColumnName="apellido1" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="usuarioId" ColumnName="usuarioId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

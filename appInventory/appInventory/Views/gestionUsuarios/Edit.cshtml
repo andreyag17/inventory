@@ -1,0 +1,114 @@
+﻿@model appInventory.Models.usuario
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Menu/Menu.cshtml";
+}
+<div class="overlayPanel" style="margin-top: 5%">
+    <div class="row">
+        <div style="text-align:left;">
+            <a href="@Url.Action("Index", "gestionUsuarios")"> <p class="fa fa-arrow-left fa-2x" aria-hidden="true" style="color:black;" btn></p></a>
+        </div>
+        <div class="container mt-2">
+            <h1>Editar usuario</h1>
+            <div class="row">
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="row form-horizontal" style="display: flex; flex-wrap: wrap; margin-top: 10px">
+                        <hr />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.usuarioId)
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>Nombre</label>
+                                <div>
+                                    @Html.EditorFor(model => model.nombre, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.nombre, "", new { @class = "text-danger" })
+                                   
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Primer apellido</label>
+                                <div>
+                                    @Html.EditorFor(model => model.apellido1, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.apellido1, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Segundo apellido</label>
+                                <div>
+                                    @Html.EditorFor(model => model.apellido2, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.apellido2, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>Correo electronico</label>
+                                <div>
+                                    @Html.EditorFor(model => model.correoElectronico, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.correoElectronico, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Nombre de usuario</label>
+                                <div>
+                                    @Html.EditorFor(model => model.nombreUsuario, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.nombreUsuario, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            @*<div class="form-group">
+                                    @Html.LabelFor(model => model.contrasennaUsuario, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.contrasennaUsuario, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.contrasennaUsuario, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>*@
+
+                            <div class="form-group">
+                                <label>Rol</label>
+                                <div>
+                                    @Html.DropDownList("rol_Id", null, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.rol_Id, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-top: 2%">
+                            <div>
+                                @*<input type="submit" value="Guardar" class="btn btn-success" />.*@
+                                <button type="submit" id="btnIngresar" value="Guardar" class="btn btn-success btn-block mt-3">
+                                    Guardar
+                                    <span id="spinner" class="spinner-border spinner-border-sm d-none" aria-hidden="true"></span>
+                                    <span class="visually-hidden" role="status">Cargando...</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const form = document.querySelector("form");
+    const spinner = document.getElementById("spinner");
+    const btn = document.getElementById("btnIngresar");
+
+    if (form && spinner && btn) {
+        form.addEventListener("submit", function () {
+            btn.disabled = true;
+            setTimeout(() => {
+                spinner.classList.remove("d-none");
+                btn.disabled = false;
+            }, 2000);
+        });
+    }
+</script>
+

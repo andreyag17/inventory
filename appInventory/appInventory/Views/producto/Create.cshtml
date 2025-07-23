@@ -1,0 +1,70 @@
+﻿@model appInventory.Models.producto
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Menu/Menu.cshtml";
+}
+<div class="overlayPanel">
+    <div class="row">
+        <div style="text-align:left;">
+            <a href="@Url.Action("Index", "producto")"> <p class="fa fa-arrow-left fa-2x" aria-hidden="true" style="color: black;" btn> </p></a>
+        </div>
+        <h2>Crear producto</h2>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="row form-horizontal" style="display: flex; flex-wrap: wrap; margin-top: 10px">
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Código</label>
+                        <div class="col-md-0" style="width:100%">
+                            @Html.EditorFor(model => model.codigoProducto, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.codigoProducto, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 15px">
+                        <label class="control-label col-md-2">Nombre</label>
+                        <div class="col-md-0" style="width: 100%;">
+                            @Html.EditorFor(model => model.nombreProducto, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.nombreProducto, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="form-group" style=" margin-left: 50px;">
+                        <label class="control-label col-md-2">Cantidad</label>
+                        <div class="col-md-10" style="width: 100%;">
+                            @Html.EditorFor(model => model.cantidad, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.cantidad, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 15px; margin-left: 9%; width:91%SS">
+                        <label class="control-label col-md-2">Categoria</label>
+                        <div class="col-md-10" style="width: 100%;">
+                            @Html.DropDownList("categoriaId", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.categoriaId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+
+                <button type="submit" value="Create" class="btn btn-success" style="margin-top: 10px">
+                    Crear
+                    <span id="spinner" class="spinner-border spinner-border-sm d-none" aria-hidden="true"></span>
+                    <span class="visually-hidden" role="status">Cargando...</span>
+                </button>
+
+            </div>
+        }
+
+
+    </div>
+</div>

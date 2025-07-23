@@ -1,0 +1,57 @@
+﻿@model appInventory.Models.producto
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Menu/Menu.cshtml";
+}
+<div class="overlayPanel">
+    <div class="row">
+        <div style="text-align:left;">
+            <a href="@Url.Action("Index", "gestionUsuarios")"> <p class="fa fa-arrow-left fa-2x" aria-hidden="true" style="color:black;" btn></p></a>
+        </div>
+        <div class="container mt-2">
+            <h1>Editar producto</h1>
+            <div class="row">
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="row form-horizontal" style="display: flex; flex-wrap: wrap; margin-top: 10px">
+
+                        <hr />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.codigoProducto)
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>Nombre del producto</label>
+                                <div>
+                                    @Html.EditorFor(model => model.nombreProducto, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.nombreProducto, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>Categoria</label>
+                                <div>
+                                    @Html.DropDownList("categoriaId", null, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.categoriaId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 1%">
+                            <div>
+                                <input type="submit" value="Guardar" class="btn btn-success" />
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

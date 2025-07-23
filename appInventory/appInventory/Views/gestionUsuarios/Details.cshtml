@@ -1,0 +1,75 @@
+﻿@model appInventory.Models.usuario
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Menu/Menu.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>usuario</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.apellido1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.apellido1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.apellido2)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.apellido2)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.correoElectronico)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.correoElectronico)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.nombreUsuario)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.nombreUsuario)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.contrasennaUsuario)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.contrasennaUsuario)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.rol.rolNombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.rol.rolNombre)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.usuarioId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

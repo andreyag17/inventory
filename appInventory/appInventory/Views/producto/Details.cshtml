@@ -1,0 +1,44 @@
+﻿@model appInventory.Models.producto
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Menu/Menu.cshtml";
+}
+<div class="overlayPanel">
+    <h2>Details</h2>
+
+    <div>
+        <h4>producto</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.nombreProducto)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.nombreProducto)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.cantidad)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.cantidad)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.categoria.nombreCategoria)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.categoria.nombreCategoria)
+            </dd>
+
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.codigoProducto }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</div>

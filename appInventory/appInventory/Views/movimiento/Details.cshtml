@@ -1,0 +1,52 @@
+﻿@model List<appInventory.Models.movimiento>
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Menu/Menu.cshtml";
+}
+
+<div class="overlayPanelListas" style="margin-top: 10%">
+    <div class="row">
+        <div style="text-align:left;">
+            <a href="@Url.Action("Index", "producto")"> <p class="fa fa-arrow-left fa-2x" aria-hidden="true" style="color: black;" btn> </p></a>
+        </div>
+        <div class="container mt-2">
+            <h2>Detalles</h2>
+            <table class="table">
+                <thead class="table-dark">
+                    <tr>
+                        @*<th>Código</th>*@
+                        <th>Código de producto</th>
+                        <th>Nombre de producto</th>
+                        <th>Cantidad</th>
+                        <th>Vencimiento</th>
+                        <th>Creado por:</th>
+                        <th>Cédula del creador</th>
+                        <th>Ingreso</th>
+                        <th>Salida</th>
+                        <th>Creado el:</th>
+                        <th>Tipo movimieto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            @*<td>@Html.DisplayFor(model => model.codigoId)</td>*@
+                            <td>@Html.DisplayFor(model => item.codigoProducto)</td>
+                            <td>@Html.DisplayFor(model => item.producto.nombreProducto)</td>
+                            <td>@Html.DisplayFor(model => item.cantidad)</td>
+                            <td>@Html.DisplayFor(model => item.fechaVencimiento)</td>
+                            <td>@Html.DisplayFor(model => item.usuario.nombre)</td>
+                            <td>@Html.DisplayFor(model => item.usuario.usuarioId)</td>
+                            <td>@Html.DisplayFor(model => item.fechaIngreso)</td>
+                            <td>@Html.DisplayFor(model => item.fechaSalida)</td>
+                            <td>@Html.DisplayFor(model => item.creacionRegistro)</td>
+                            <td>@Html.DisplayFor(model => item.tipoMovimiento)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,87 @@
+﻿@model IEnumerable<appInventory.Models.usuario>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Menu/Menu.cshtml";
+}
+
+<div class="overlayPanelListas" style="margin-top: 10%">
+    <div class="row">
+        <div style="text-align:left;">
+            <a href="@Url.Action("PaginaPrincipal", "Menu")"> <p class="fa fa-arrow-left fa-2x" aria-hidden="true" style="color:black;" btn></p></a>
+        </div>
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
+                @ViewBag.Error
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        <div class="container mt-2">
+            <h2 class="mb-4">Lista de usuarios</h2>
+            <div class="row">
+                <div class="col-lg-6" style="display:flex;">
+                    <p style="text-align:left">
+                        @Html.ActionLink("Nuevo usuario", "Create", null, new { @class = "btn btn-primary" })
+                    </p>
+                </div>
+
+                <div class="col-lg-6" style="display: flex; justify-content: right; padding-right: 2%; ">
+                    @using (Html.BeginForm("Buscador", "gestionUsuarios", FormMethod.Post))
+                    {
+                        <div class="form-group" style="display:flex; justify-content: flex-end">
+                            <div class="input-group-append" style="display: flex; width: 90%;">
+                                <input type="search" class="form-control" id="usuarioId" name="usuarioId" placeholder="Cédula" />
+                                <input type="search" class="form-control" id="nombre" name="nombre" placeholder="Nombre" style="margin-left: 5px" />
+                                <input type="search" class="form-control" id="rol" name="rol" placeholder="Rol" style="margin-left: 5px" />
+                                <button class="btn btn-outline-primary" type="submit" id="botonBuscar" style=" margin-left: 5px" title="Buscar">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="mt-2">
+                <table class="table">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Cédula</th>
+                            <th>Nombre</th>
+                            <th>Primer apellido</th>
+                            <th>Segundo apellido</th>
+                            <th>Correo</th>
+                            <th>Nombre de usuario</th>
+                            <th>Rol</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.usuarioId)</td>
+                                <td>@Html.DisplayFor(modelItem => item.nombre)</td>
+                                <td>@Html.DisplayFor(modelItem => item.apellido1) </td>
+                                <td>@Html.DisplayFor(modelItem => item.apellido2) </td>
+                                <td>@Html.DisplayFor(modelItem => item.correoElectronico) </td>
+                                <td>@Html.DisplayFor(modelItem => item.nombreUsuario)</td>
+                                <td>@Html.DisplayFor(modelItem => item.rol.rolNombre)</td>
+                                <td style="padding:5px">
+                                    <a href="@Url.Action("Edit", new { id = item.usuarioId })"
+                                       class="btn btn-sm btn-warning" title="Editar">
+                                        <i class="fa fa-edit fa-1x" style="color: white; width: 15px"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,97 @@
+﻿@model IEnumerable<appInventory.Models.producto>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Menu/Menu.cshtml";
+}
+<div class="overlayPanelListas" style="margin-top: 10%">
+    <div class="row">
+        <div style="text-align:left;">
+            <a href="@Url.Action("PaginaPrincipal", "Menu")"> <p class="fa fa-arrow-left fa-2x" aria-hidden="true" style="color: black;" btn> </p></a>
+        </div>
+        <div class="container mt-2">
+            <h2 class="mb-4">Lista de inventario</h2>
+            <div class="row">
+                <div class="col-lg-6" style="display:flex;">
+                    <p style="text-align:left">
+                        @Html.ActionLink("Crear producto", "Create", null, new { @class = "btn btn-primary" })
+                    </p>
+                    <p style="text-align: left; margin-left:10px">
+                        @Html.ActionLink("Generar ingreso", "Ingreso", null, new { @class = "btn btn-primary" })
+                    </p>
+                    <p style="text-align: left; margin-left:10px">
+                        @Html.ActionLink("Generar salida", "SalidaM", null, new { @class = "btn btn-primary" })
+                    </p>
+                </div>
+
+                <div class="col-lg-6" style="display: flex; justify-content: right; padding-right: 2%; ">
+                    @using (Html.BeginForm("Buscador", "producto", FormMethod.Post))
+                    {
+                        <div class="form-group" style="display:flex; justify-content: flex-end">
+                            <div class="input-group-append" style="display: flex; width: 90%;">
+                                <input type="search" class="form-control" id="codProducto" name="codProducto" placeholder="Código" />
+                                <input type="search" class="form-control" id="nomProducto" name="nomProducto" placeholder="Nombre" style=" margin-left: 5px" />
+                                <input type="search" class="form-control" id="tipoProducto" name="tipoProducto" placeholder="Categoría" style=" margin-left: 5px" />
+                                <button class="btn btn-outline-primary" type="submit" id="botonBuscar" style=" margin-left: 5px" title="Buscar">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                                @*<select class="form-select" style="margin-left: 5px" name="Buscador" id="Buscador">
+                                            <option value="codProducto">Código de producto</option>
+                                            <option value="nomProducto">Nombre del producto</option>
+                                            <option value="tipoProducto">Tipo del producto</option>
+
+                                    </select>*@
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="mt-2">
+                <table class="table">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Código producto</th>
+                            <th>Nombre del producto</th>
+                            <th>Cantidad</th>
+                            <th>Categoría</th>
+                            @if (Convert.ToInt32(Session["rol"]?.ToString() ?? "0") == 1)
+                            {
+                                <th style="width:20%">Acciones</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td style="width:20%">@Html.DisplayFor(modelItem => item.codigoProducto)</td>
+                                <td>@Html.DisplayFor(modelItem => item.nombreProducto)</td>
+                                <td>@Html.DisplayFor(modelItem => item.cantidad)</td>
+                                <td>@Html.DisplayFor(modelItem => item.categoria.nombreCategoria)</td>
+
+                                @if (Convert.ToInt32(Session["rol"]?.ToString() ?? "0") == 1)
+                                {
+                                    <td style="padding:5px">
+                                        <a href="@Url.Action("Edit", new { id = item.codigoProducto })"
+                                           class="btn btn-sm btn-warning"
+                                           title="Editar">
+                                            <i class="fa fa-edit fa-1x" style="color: white; width: 15px"></i>
+                                        </a>
+                                        <a href="@Url.Action("Details", "movimiento", new { id = item.codigoProducto})"
+                                           class="btn btn-sm btn-info"
+                                           title="Detalles">
+                                            <i class="fa fa-info fa-1x" style="color:white; width: 15px"></i>
+                                        </a>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>

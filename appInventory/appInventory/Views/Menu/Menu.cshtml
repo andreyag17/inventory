@@ -1,0 +1,81 @@
+﻿ 
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    <title >Inventory</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/Site.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+</head>
+<body>
+    <div>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="@Url.Action("PaginaPrincipal", "Menu")" style="padding-left:10px; font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif">
+                Inventory
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Inventario
+                        </a>
+                        <ul class="dropdown-menu" style="background-color:dimgray;">
+                            <a class="dropdown-item" href="@Url.Action("Index", "Producto")">Ver Inventario</a>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="@Url.Action("Create", "Producto")">Crear producto</a></li>
+                            <li><a class="dropdown-item" href="@Url.Action("Create", "movimiento")">Generar entrada del inventario</a></li>
+                            <li><a class="dropdown-item" href="@Url.Action("Salida", "movimiento")">Generar salida del inventario</a></li>
+
+
+                        </ul>
+                    </li>
+
+                    @if (Convert.ToInt32(Session["rol"]?.ToString() ?? "0") == 1)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "gestionUsuarios")">Usuarios</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "movimiento")">Movimiento</a>
+
+                        </li>
+                    }
+
+                <li class="nav-item">
+                    <a id="cerrarSession" class="nav-link" style="color:red" href="@Url.Action("CerrarSession", "Menu")" >Cerrar sesión</a>
+                    
+                </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="container">
+            @RenderBody()
+        </div>
+
+        
+
+    </div>
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+    @*<script src="~/Scripts/jquery-3.6.0.min.js"></script>
+        <script src="~/Scripts/bootstrap.min.js"></script>*@
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

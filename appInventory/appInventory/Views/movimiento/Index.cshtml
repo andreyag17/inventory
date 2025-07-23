@@ -1,0 +1,62 @@
+﻿@model IEnumerable<appInventory.Models.movimiento>
+
+@{
+    ViewBag.Title = "Movimientos";
+    Layout = "~/Views/Menu/Menu.cshtml";
+}
+<div class="overlayPanelListas" style="margin-top: 10%">
+    <div class="row">
+        <div style="text-align:left;">
+            <a href="@Url.Action("PaginaPrincipal", "Menu")"> <p class="fa fa-arrow-left fa-2x" aria-hidden="true" style="color:black;" btn></p></a>
+        </div>
+        <div class="container mt-2">
+            <h2 class="mb-4">Lista de movimientos</h2>
+            <div style="display: flex; justify-content: right; padding-right: 2%; ">
+                @using (Html.BeginForm("BuscadorMovimiento", "movimiento", FormMethod.Post))
+                {
+                    <div class="form-group" style="display:flex; justify-content: flex-end;">
+                        <div class="input-group-append" style="display: flex; width: 90%;">
+                            <input type="search" class="form-control" id="nombreProducto" name="nombreProducto" placeholder="Producto" />
+                            <input type="search" class="form-control" id="tipoMovimiento" name="tipoMovimiento" placeholder="Tipo de movimiento" style=" margin-left: 5px" />
+                            <input type="search" class="form-control" id="Registradox" name="Registradox" placeholder="Registrado por:" style=" margin-left: 5px" />
+                            <button class="btn btn-outline-primary" type="submit" id="botonBuscar" style=" margin-left: 5px" title="Buscar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="mt-2">
+                <table class="table">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Vencimiento</th>
+                            <th>Fecha de ingreso</th>
+                            <th>Fecha de salida</th>
+                            <th>Fecha de registro</th>
+                            <th>Registrado por</th>
+                            <th>Tipo de movimiento</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.producto.nombreProducto)</td>
+                                <td>@Html.DisplayFor(modelItem => item.cantidad)</td>
+                                <td>@Html.DisplayFor(modelItem => item.fechaVencimiento)</td>
+                                <td>@Html.DisplayFor(modelItem => item.fechaIngreso)</td>
+                                <td>@Html.DisplayFor(modelItem => item.fechaSalida)</td>
+                                <td>@Html.DisplayFor(modelItem => item.creacionRegistro)</td>
+                                <td>@Html.DisplayFor(modelItem => item.usuario.nombre)</td>
+                                <td>@Html.DisplayFor(modelItem => item.tipoMovimiento)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
