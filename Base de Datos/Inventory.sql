@@ -1,4 +1,3 @@
-
 CREATE DATABASE inventory;
 GO 
 USE inventory;
@@ -11,6 +10,7 @@ fechaIngreso DATETIME,
 fechaSalida DATETIME,
 creacionRegistro DATETIME,
 cantidad INT,
+sobrante INT,
 tipoMovimiento INT,
 usuarioId int
 );
@@ -35,7 +35,7 @@ apellido1 VARCHAR (150),
 apellido2 VARCHAR (150),
 correoElectronico VARCHAR (150),
 nombreUsuario VARCHAR (150),
-contrase�aUsuario VARCHAR (150),
+contrasennaUsuario VARCHAR (150),
 rol_Id INT
 )
 
@@ -70,3 +70,13 @@ FOREIGN KEY (rol_Id) REFERENCES rol(rol_Id);
 ALTER TABLE producto 
 ADD CONSTRAINT FK_Categoria_Producto
 FOREIGN KEY (categoriaId) REFERENCES categoria(categoriaId);
+
+INSERT INTO categoria (categoriaId, nombreCategoria) VALUES
+(1, 'Bebidas'),
+(2, 'Congelados'),
+(3, 'Ferretería'),
+(4, 'Farmacia'),
+(5, 'Carne'),
+(6, 'Comestibles'),
+(7, 'Juguetería'),
+(8, 'Enlatados');
