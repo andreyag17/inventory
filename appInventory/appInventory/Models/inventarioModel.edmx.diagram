@@ -7,15 +7,15 @@
       <Diagram DiagramId="fe997674033f46f4a73015820b2fad68" Name="Diagram1">
         <EntityTypeShape EntityType="inventoryModel.categoria" Width="1.5" PointX="5.5" PointY="6.375" IsExpanded="true" />
         <EntityTypeShape EntityType="inventoryModel.ingresoUsuario" Width="1.5" PointX="3.75" PointY="5" IsExpanded="true" />
-        <EntityTypeShape EntityType="inventoryModel.movimiento" Width="1.5" PointX="7.125" PointY="2" IsExpanded="true" />
         <EntityTypeShape EntityType="inventoryModel.producto" Width="1.5" PointX="7.125" PointY="5.375" IsExpanded="true" />
         <EntityTypeShape EntityType="inventoryModel.rol" Width="1.5" PointX="3.75" PointY="3.125" IsExpanded="true" />
         <AssociationConnector Association="inventoryModel.FK_Categoria_Producto" ManuallyRouted="false" />
-        <AssociationConnector Association="inventoryModel.FK_Movimiento_Producto" ManuallyRouted="false" />
         <EntityTypeShape EntityType="inventoryModel.usuario" Width="1.5" PointX="5.5" PointY="3" />
         <AssociationConnector Association="inventoryModel.FK_IngresoUsuario_Usuario" />
-        <AssociationConnector Association="inventoryModel.FK_Movimeinto_Usuario" />
         <AssociationConnector Association="inventoryModel.FK_Usuario_Rol" />
+        <EntityTypeShape EntityType="inventoryModel.movimiento" Width="1.5" PointX="7.125" PointY="1.875" />
+        <AssociationConnector Association="inventoryModel.FK_Movimeinto_Usuario" />
+        <AssociationConnector Association="inventoryModel.FK_Movimiento_Producto" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

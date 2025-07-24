@@ -11,8 +11,7 @@ namespace appInventory.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class producto
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -20,12 +19,10 @@ namespace appInventory.Models
         {
             this.movimiento = new HashSet<movimiento>();
         }
+    
         public string codigoProducto { get; set; }
-
         public string nombreProducto { get; set; }
-
         public Nullable<int> cantidad { get; set; }
-
         public string categoriaId { get; set; }
     
         public virtual categoria categoria { get; set; }

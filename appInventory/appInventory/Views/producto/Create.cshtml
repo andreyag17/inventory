@@ -4,20 +4,29 @@
     ViewBag.Title = "Create";
     Layout = "~/Views/Menu/Menu.cshtml";
 }
-<div class="overlayPanel">
+<div class="overlayPanel" style="margin-top: 2%">
     <div class="row">
+
+        <div style="text-align:left;">
+            <a href="@Url.Action("Index", "producto")"> <p class="fa fa-arrow-left fa-2x" aria-hidden="true" style="color: black;" btn> </p></a>
+        </div>
+        <h2>Crear producto</h2>
         @if (ViewBag.crearError != null)
         {
             <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
                 @ViewBag.crearError
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
+            <script>
+                setTimeout(function () {
+                    var alertElement = document.querySelector('.alert');
+                    if (alertElement) {
+                        var alert = bootstrap.Alert.getOrCreateInstance(alertElement);
+                        alert.close();
+                    }
+                }, 2000);
+            </script>
         }
-        <div style="text-align:left;">
-            <a href="@Url.Action("Index", "producto")"> <p class="fa fa-arrow-left fa-2x" aria-hidden="true" style="color: black;" btn> </p></a>
-        </div>
-        <h2>Crear producto</h2>
-
         @using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()

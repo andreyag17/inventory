@@ -104,10 +104,7 @@ namespace appInventory.Controllers
                             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                         }
 
-                        var movimiento = db.movimiento
-                            .Include(m => m.producto)
-                            .Include(m => m.usuario)
-                            .FirstOrDefault(m => m.idCodigo == id);
+                        var movimiento = db.movimiento.Include(m => m.producto).Include(m => m.usuario).FirstOrDefault(m => m.idCodigo == id);
 
                         if (movimiento == null)
                         {
@@ -146,18 +143,30 @@ namespace appInventory.Controllers
         // Crea producto para agregarlo a Lista de inventario
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "codigoProducto,nombreProducto,cantidad,categoriaId")] producto producto)
+        public ActionResult Create([Bind(Include = "codigoProducto,nombreProducto,cantidad,categoriaId")] producto productop)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    db.producto.Add(producto);
-                    db.SaveChanges();
-                    return RedirectToAction("Index", new { mensaje = "✅ Creado correctamente." });
+                    //producto producto = new producto();
+                    var producto = db.producto.Find(productop.codigoProducto);
+                    if (producto == null)
+                    {
+                        productop.cantidad = 0;
+                        db.producto.Add(productop);
+                        db.SaveChanges();
+                        return RedirectToAction("Index", new { mensaje = "✅ Creado correctamente." });
+                    }
+                    else
+                    {
+                        ViewBag.crearError = "⚠️ Ese codigo ya existe";
+
+                    }
                 }
-                ViewBag.categoriaId = new SelectList(db.categoria, "categoriaId", "nombreCategoria", producto.categoriaId);
-                return View(producto);
+                
+                ViewBag.categoriaId = new SelectList(db.categoria, "categoriaId", "nombreCategoria", productop.categoriaId);
+                return View(productop);
             }
             catch (Exception)
             {

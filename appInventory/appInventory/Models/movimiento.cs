@@ -11,26 +11,21 @@ namespace appInventory.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
-
+    
     public partial class movimiento
     {
         public int idCodigo { get; set; }
         public string codigoProducto { get; set; }
-        [Required(ErrorMessage = "La fecha de vencimieto es obligatorio.")]
         public Nullable<System.DateTime> fechaVencimiento { get; set; }
-       
         public Nullable<System.DateTime> fechaIngreso { get; set; }
         public Nullable<System.DateTime> fechaSalida { get; set; }
         public Nullable<System.DateTime> creacionRegistro { get; set; }
-        [Required(ErrorMessage = "La cantidad es obligatorio.")]
-        [Range(1, int.MaxValue, ErrorMessage = "La cantidad debe ser mayor a 0.")]
         public Nullable<int> cantidad { get; set; }
         public Nullable<int> tipoMovimiento { get; set; }
         public Nullable<int> usuarioId { get; set; }
+        public Nullable<int> sobrante { get; set; }
     
-        public virtual producto producto { get; set; }
         public virtual usuario usuario { get; set; }
+        public virtual producto producto { get; set; }
     }
 }

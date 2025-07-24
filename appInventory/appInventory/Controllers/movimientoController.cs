@@ -8,6 +8,8 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Services.Description;
+
 
 namespace appInventory.Controllers
 {
@@ -32,26 +34,37 @@ namespace appInventory.Controllers
         //GET: buscador
         //Busca entre los movimientos siertos parametros
         [HttpPost]
-        public ActionResult BuscadorMovimiento(string nombreProducto, string tipoMovimiento, string Registradox)
-        {
-            var movimientos = db.movimiento.Include(p => p.usuario).AsQueryable();
 
+        public ActionResult BuscadorMovimiento(string nombreProducto, string tipoMovimiento, string Registradox, DateTime? Fecha)
+        {
+            //var movimientos = db.movimiento.Include(p => p.usuario).AsQueryable();
+            var movimientos = db.movimiento.Include(p => p.usuario).Include(p => p.producto).ToList();
             if (!string.IsNullOrEmpty(nombreProducto))
             {
-                movimientos = movimientos.Where(p => p.producto.nombreProducto.Contains(nombreProducto));
+                movimientos = movimientos.Where(p => p.producto.nombreProducto.Contains(nombreProducto)).ToList();
             }
 
-            if (!string.IsNullOrEmpty(tipoMovimiento.ToString()))
+            if (!string.IsNullOrEmpty(tipoMovimiento))
             {
-                movimientos = movimientos.Where(p => p.tipoMovimiento.ToString().Contains(tipoMovimiento));
+                movimientos = movimientos.Where(p => p.tipoMovimiento.ToString().Contains(tipoMovimiento)).ToList();
             }
 
             if (!string.IsNullOrEmpty(Registradox))
             {
-                movimientos = movimientos.Where(p => p.usuario.nombre.Contains(Registradox));
+                movimientos = movimientos.Where(p => p.usuario.nombre.Contains(Registradox)).ToList();
             }
-            //return View(movimientos.ToList());
-            return View("Index", movimientos.ToList());
+
+            if (Fecha.HasValue)
+            {
+                DateTime fechaBuscar = Fecha.Value.Date;
+                movimientos = movimientos
+                    .Where(p =>
+                        (p.fechaIngreso.HasValue && p.fechaIngreso.Value.Date == fechaBuscar) ||
+                        (p.fechaSalida.HasValue && p.fechaSalida.Value.Date == fechaBuscar) ||
+                        (p.creacionRegistro.HasValue && p.creacionRegistro.Value.Date == fechaBuscar))
+                    .ToList();
+            }
+            return View("Index", movimientos);
         }
 
         // GET: movimiento/Details/5
@@ -91,7 +104,6 @@ namespace appInventory.Controllers
             }
         }
 
-        //Genera una salida, resta de cantidad en productos y además muestra una fecha para que los usuarios administradores observen cuantas salidas se realizan
         // POST: movimiento/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -105,7 +117,7 @@ namespace appInventory.Controllers
                 movimiento.usuarioId = user.usuarioId;
                 productoController prod = new productoController();
                 prod.Actualizar(movimiento.codigoProducto, Convert.ToInt32(movimiento.cantidad));
-
+                movimiento.sobrante = movimiento.cantidad;
                 db.movimiento.Add(movimiento);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -115,7 +127,11 @@ namespace appInventory.Controllers
             ViewBag.usuarioId = new SelectList(db.usuario, "usuarioId", "nombre", movimiento.usuarioId);
             return View(movimiento);
         }
+
+
         // GET: movimiento/Salida
+        //Genera una salida, resta de cantidad en productos y además muestra una fecha para que los usuarios administradores observen cuantas salidas se realizan
+
         public ActionResult Salida()
         {
             if (Session["usuario"] != null)
@@ -136,25 +152,74 @@ namespace appInventory.Controllers
         // POST: movimiento/Salida
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Salida ([Bind(Include = "idCodigo,codigoProducto,fechaVencimiento,fechaIngreso,fechaSalida,creacionRegistro,cantidad,tipoMovimiento,usuarioId")] movimiento movimiento)
+        public ActionResult Salida([Bind(Include = "idCodigo,codigoProducto,fechaVencimiento,fechaIngreso,fechaSalida,creacionRegistro,cantidad,tipoMovimiento,usuarioId")] movimiento movimientop)
         {
+
             if (ModelState.IsValid)
             {
-                movimiento.creacionRegistro = DateTime.Now;
-                movimiento.tipoMovimiento = 2;
-                usuario user = (usuario)Session["usuario"];
-                movimiento.usuarioId = user.usuarioId;
-                productoController prod = new productoController();
-                prod.Actualizar(movimiento.codigoProducto, Convert.ToInt32(-movimiento.cantidad));
+                //var movimientos = db.movimiento.Include(p => p.usuario).Include(p => p.producto).ToList();
+                var productos = db.producto.AsQueryable();
+                int cantidad = 0;
+                int cantidadSobrante = 0;
+                int cantidadSalida = Convert.ToInt32(movimientop.cantidad);
+                productos = productos.Where(p => p.codigoProducto == movimientop.codigoProducto && p.cantidad >= movimientop.cantidad);
+                if (productos.Count() > 0)
+                {
+                    var movimientoList = db.movimiento.ToList();
+                    movimientoList = movimientoList.Where(p => p.codigoProducto == movimientop.codigoProducto && p.sobrante > 0 && p.tipoMovimiento == 1).ToList();
 
-                db.movimiento.Add(movimiento);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                    foreach (var item in movimientoList)
+                    {
+                        if (cantidadSalida != 0)
+                        {
+                            if (cantidadSalida >= item.sobrante)
+                            {
+                                cantidadSalida -=  Convert.ToInt32(item.sobrante);
+                                cantidad = Convert.ToInt32(item.sobrante);
+                                cantidadSobrante = 0;
+                            }
+                            else
+                            {
+                                cantidad = cantidadSalida;
+                                cantidadSalida = 0;
+                                cantidadSobrante = Convert.ToInt32(item.sobrante) - cantidad;
+
+                            }
+
+                            var mov = db.movimiento.FirstOrDefault(p => p.codigoProducto == item.codigoProducto && p.sobrante > 0 && p.tipoMovimiento == 1);
+                            mov.sobrante = cantidadSobrante;
+                            db.SaveChanges();
+
+                            movimientop.creacionRegistro = DateTime.Now;
+                            movimientop.tipoMovimiento = 2;
+                            movimientop.fechaVencimiento = mov.fechaVencimiento;
+                            movimientop.fechaIngreso = mov.fechaIngreso;
+                            movimientop.cantidad = cantidad;
+                            usuario user = (usuario)Session["usuario"];
+                            movimientop.usuarioId = user.usuarioId;
+                            productoController prod = new productoController();
+                            prod.Actualizar(movimientop.codigoProducto, Convert.ToInt32(-cantidad));
+
+
+                            db.movimiento.Add(movimientop);
+                            db.SaveChanges();
+                        }
+
+                    }
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.SalidaError = "⚠️ No hay cantidad suficiente para este producto";
+
+                }
             }
 
-            ViewBag.codigoProducto = new SelectList(db.producto, "codigoProducto", "nombreProducto", movimiento.codigoProducto);
-            ViewBag.usuarioId = new SelectList(db.usuario, "usuarioId", "nombre", movimiento.usuarioId);
-            return View(movimiento);
+            ViewBag.codigoProducto = new SelectList(db.producto, "codigoProducto", "nombreProducto", movimientop.codigoProducto);
+            ViewBag.usuarioId = new SelectList(db.usuario, "usuarioId", "nombre", movimientop.usuarioId);
+            //return View(movimiento);
+            return View(movimientop);
+
         }
 
         protected override void Dispose(bool disposing)

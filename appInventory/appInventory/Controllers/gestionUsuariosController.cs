@@ -73,8 +73,16 @@ namespace appInventory.Controllers
         // GET: gestionUsuarios/Create
         public ActionResult Create()
         {
-            ViewBag.rol_Id = new SelectList(db.rol, "rol_Id", "rolNombre");
-            return View();
+            if (Session["usuario"] != null)
+            {
+                ViewBag.rol_Id = new SelectList(db.rol, "rol_Id", "rolNombre");
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Usuario");
+            }
+            
         }
 
         // POST: gestionUsuarios/Create
@@ -84,39 +92,58 @@ namespace appInventory.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "usuarioId,nombre,apellido1,apellido2,correoElectronico,nombreUsuario,contrasennaUsuario,rol_Id")] usuario usuario)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.usuario.Add(usuario);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+                if (ModelState.IsValid)
+                {
+                    var usuarioB = db.usuario.AsQueryable();
+                    usuarioB = usuarioB.Where(p => p.usuarioId == usuario.usuarioId);
+                    if (usuarioB == null)
+                    {
+                        db.usuario.Add(usuario);
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
+                    ViewBag.errorCrear = "Ese número de cédula ya fue registrado";
+                }
 
-            ViewBag.rol_Id = new SelectList(db.rol, "rol_Id", "rolNombre", usuario.rol_Id);
-            return View(usuario);
+                ViewBag.rol_Id = new SelectList(db.rol, "rol_Id", "rolNombre", usuario.rol_Id);
+                return View(usuario);
+            }
+            catch (Exception)
+            {
+                ViewBag.errorCrear = "Error";
+                throw;
+            }
+           
         }
 
         // GET: gestionUsuarios/Edit/5
         public ActionResult Edit(int? id)
         {
-            if (id == null)
+            if (Session["usuario"] != null)
+            { 
+                if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             usuario usuario = db.usuario.Find(id);
             if (usuario == null)
             {
-                ViewBag.LoginError = "⚠️ Usuario o contraseña incorrectos.";
+                ViewBag.LoginError = "⚠️ Error al editar.";
                 return View();
 
             }
-            ViewBag.rol_Id = new SelectList(db.rol, "rol_Id", "rolNombre", usuario.rol_Id);
-            return View(usuario);
-            //Haora
+                ViewBag.rol_Id = new SelectList(db.rol, "rol_Id", "rolNombre", usuario.rol_Id);
+                return View(usuario);
+            }
+            else
+            {
+                return RedirectToAction("Login", "Usuario");
+            }
         }
 
         // POST: gestionUsuarios/Edit/5
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
-        // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(listaUsuario model)

@@ -18,7 +18,6 @@ namespace appInventory.Models
         public inventoryEntities()
             : base("name=inventoryEntities")
         {
-            //fechaIngreso = DateTime.Today;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -28,11 +27,9 @@ namespace appInventory.Models
     
         public virtual DbSet<categoria> categoria { get; set; }
         public virtual DbSet<ingresoUsuario> ingresoUsuario { get; set; }
-        public virtual DbSet<movimiento> movimiento { get; set; }
         public virtual DbSet<producto> producto { get; set; }
         public virtual DbSet<rol> rol { get; set; }
         public virtual DbSet<usuario> usuario { get; set; }
-        //public DateTime fechaIngreso { get; set; }
+        public virtual DbSet<movimiento> movimiento { get; set; }
     }
-    
 }

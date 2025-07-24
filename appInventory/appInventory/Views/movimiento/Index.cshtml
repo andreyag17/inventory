@@ -6,19 +6,41 @@
 }
 <div class="overlayPanelListas" style="margin-top: 10%">
     <div class="row">
+
         <div style="text-align:left;">
             <a href="@Url.Action("PaginaPrincipal", "Menu")"> <p class="fa fa-arrow-left fa-2x" aria-hidden="true" style="color:black;" btn></p></a>
         </div>
         <div class="container mt-2">
             <h2 class="mb-4">Lista de movimientos</h2>
             <div style="display: flex; justify-content: right; padding-right: 2%; ">
+                @if (ViewBag.buscarError != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
+                        @ViewBag.buscarError
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <script>
+                        setTimeout(function () {
+                            var alertElement = document.querySelector('.alert');
+                            if (alertElement) {
+                                var alert = bootstrap.Alert.getOrCreateInstance(alertElement);
+                                alert.close();
+                            }
+                        }, 2000);
+                    </script>
+                }
                 @using (Html.BeginForm("BuscadorMovimiento", "movimiento", FormMethod.Post))
                 {
                     <div class="form-group" style="display:flex; justify-content: flex-end;">
-                        <div class="input-group-append" style="display: flex; width: 90%;">
+                        <div class="input-group-append" style="display: flex; width: 100%;">
                             <input type="search" class="form-control" id="nombreProducto" name="nombreProducto" placeholder="Producto" />
-                            <input type="search" class="form-control" id="tipoMovimiento" name="tipoMovimiento" placeholder="Tipo de movimiento" style=" margin-left: 5px" />
-                            <input type="search" class="form-control" id="Registradox" name="Registradox" placeholder="Registrado por:" style=" margin-left: 5px" />
+                            <input type="search" class="form-control" id="Registradox" name="Registradox" placeholder="Usuario" style=" margin-left: 5px" />
+                            <select class="form-control" id="tipoMovimiento" name="tipoMovimiento" style="margin-left: 5px">
+                                <option value="">Tipo de movimiento</option>
+                                <option value="1">Entrada</option>
+                                <option value="2">Salida</option>
+                            </select>
+                            <input type="date" class="form-control" id="fecha" name="fecha" style="margin-left: 5px" />
                             <button class="btn btn-outline-primary" type="submit" id="botonBuscar" style=" margin-left: 5px" title="Buscar">
                                 <i class="fa fa-search"></i>
                             </button>
@@ -51,7 +73,14 @@
                                 <td>@Html.DisplayFor(modelItem => item.fechaSalida)</td>
                                 <td>@Html.DisplayFor(modelItem => item.creacionRegistro)</td>
                                 <td>@Html.DisplayFor(modelItem => item.usuario.nombre)</td>
-                                <td>@Html.DisplayFor(modelItem => item.tipoMovimiento)</td>
+                                @if (item.tipoMovimiento == 1)
+                                {
+                                    <td>Entrada</td>
+                                }
+                                else if (item.tipoMovimiento == 2)
+                                {
+                                    <td>Salida</td>
+                                }
                             </tr>
                         }
                     </tbody>

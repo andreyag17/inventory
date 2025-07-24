@@ -5,13 +5,28 @@
     Layout = "~/Views/Menu/Menu.cshtml";
 }
 
-<div class="overlayPanel">
+<div class="overlayPanel" style="margin-top: 2%">
     <div class="row">
         <div style="text-align:left;">
             <a href="@Url.Action("Index", "producto")"> <p class="fa fa-arrow-left fa-2x" aria-hidden="true" style="color: black;" btn> </p></a>
         </div>
         <h2>Generar Salida</h2>
-
+        @if (ViewBag.SalidaError != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
+                @ViewBag.SalidaError
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <script>
+                setTimeout(function () {
+                    var alertElement = document.querySelector('.alert');
+                    if (alertElement) {
+                        var alert = bootstrap.Alert.getOrCreateInstance(alertElement);
+                        alert.close();
+                    }
+                }, 2000);
+            </script>
+        }
         @using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()
@@ -22,25 +37,25 @@
                 <div class="col-lg-6">
                     <div class="form-group" style="margin-top: 15px">
                         <label class="control-label">Nombre de producto</label>
-                        @Html.DropDownList("codigoProducto", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.DropDownList("codigoProducto", null, htmlAttributes: new { @class = "form-control", required = "required" })
                         @Html.ValidationMessageFor(model => model.codigoProducto, "" + "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group" style="margin-top: 15px">
                         <label class="control-label">Fecha de salida</label>
-                        @Html.TextBoxFor(model => model.fechaSalida, "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date" })
+                        @Html.TextBoxFor(model => model.fechaSalida, "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date", required = "required" })
 
                         @Html.ValidationMessageFor(model => model.fechaSalida, "", new { @class = "text-danger" })
                     </div>
                 </div>
             </div>
             <div class="row">
-                
+
                 <div class="col-lg-6">
                     <div class="form-group" style="margin-top: 15px;">
                         <label class="control-label">Cantidad</label>
-                        @Html.EditorFor(model => model.cantidad, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "1" } })
+                        @Html.EditorFor(model => model.cantidad, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "1", required = "required" } })
                         @Html.ValidationMessageFor(model => model.cantidad, "", new { @class = "text-danger" })
                     </div>
                 </div>

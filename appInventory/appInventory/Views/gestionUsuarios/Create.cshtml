@@ -4,13 +4,28 @@
     ViewBag.Title = "Create";
     Layout = "~/Views/Menu/Menu.cshtml";
 }
-<div class="overlayPanel">
+<div class="overlayPanel" style="margin-top: 7%">
     <div class="row">
         <div style="text-align:left;">
-            <a href="@Url.Action("Index", "producto")"> <p class="fa fa-arrow-left fa-2x" aria-hidden="true" style="color: black;" btn> </p></a>
+            <a href="@Url.Action("Index", "gestionUsuarios")"> <p class="fa fa-arrow-left fa-2x" aria-hidden="true" style="color: black;" btn> </p></a>
         </div>
         <h2>Nuevo usuario</h2>
-
+        @if (ViewBag.errorCrear != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
+                @ViewBag.errorCrear
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <script>
+                    setTimeout(function () {
+                        var alertElement = document.querySelector('.alert');
+                        if (alertElement) {
+                            var alert = bootstrap.Alert.getOrCreateInstance(alertElement);
+                            alert.close();
+                        }
+                    }, 2000);
+                </script>
+            </div>
+        }
         @using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()
@@ -22,7 +37,7 @@
                     <div class="form-group">
                         <label>Cédula</label>
                         <div>
-                            @Html.EditorFor(model => model.usuarioId, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.EditorFor(model => model.usuarioId, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                             @Html.ValidationMessageFor(model => model.usuarioId, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -30,7 +45,7 @@
                     <div class="form-group" style="margin-top: 15px">
                         <label>Nombre</label>
                         <div>
-                            @Html.EditorFor(model => model.nombre, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.EditorFor(model => model.nombre, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                             @Html.ValidationMessageFor(model => model.nombre, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -38,7 +53,7 @@
                     <div class="form-group" style="margin-top: 15px">
                         <label>Primer apellido</label>
                         <div>
-                            @Html.EditorFor(model => model.apellido1, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.EditorFor(model => model.apellido1, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                             @Html.ValidationMessageFor(model => model.apellido1, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -46,7 +61,7 @@
                     <div class="form-group" style="margin-top: 15px">
                         <label>Segundo apellido</label>
                         <div>
-                            @Html.EditorFor(model => model.apellido2, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.EditorFor(model => model.apellido2, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                             @Html.ValidationMessageFor(model => model.apellido2, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -56,7 +71,7 @@
                     <div class="form-group" style=" margin-top: 15px;">
                         <label>Correo</label>
                         <div>
-                            @Html.EditorFor(model => model.correoElectronico, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.EditorFor(model => model.correoElectronico, new { htmlAttributes = new { @class = "form-control", required = "required", @type = "email" } })
                             @Html.ValidationMessageFor(model => model.correoElectronico, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -64,14 +79,14 @@
                     <div class="form-group" style="margin-top: 15px">
                         <label>Nombre de usuario</label>
                         <div>
-                            @Html.EditorFor(model => model.nombreUsuario, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.EditorFor(model => model.nombreUsuario, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                             @Html.ValidationMessageFor(model => model.nombreUsuario, "", new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="form-group" style="margin-top: 15px">
                         <label>Contaseña</label>
                         <div>
-                            @Html.EditorFor(model => model.contrasennaUsuario, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.EditorFor(model => model.contrasennaUsuario, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                             @Html.ValidationMessageFor(model => model.nombreUsuario, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -79,17 +94,35 @@
 
 
                     <div class="form-group" style="margin-top: 15px">
-                    <label>Rol</label>
-                    <div>
-                        @Html.DropDownList("rol_Id", null, htmlAttributes: new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.rol_Id, "", new { @class = "text-danger" })
-                    </div>
+                        <label>Rol</label>
+                        <div>
+                            @Html.DropDownList("rol_Id", null, htmlAttributes: new { @class = "form-control", required = "required" })
+                            @Html.ValidationMessageFor(model => model.rol_Id, "", new { @class = "text-danger" })
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="form-group">
-                <button type="submit" value="Create" class="btn btn-success" style="margin-top: 10px">Generar</button>
+            <div class="form-group" style="margin-top: 1%">
+                <button id="btnCrear" type="submit" class="btn btn-success">
+                    Crear
+                    <span id="spinner" class="spinner-border spinner-border-sm d-none" aria-hidden="true"></span>
+                    <span class="visually-hidden" role="status">Cargando...</span>
+                </button>
             </div>
         }
     </div>
 </div>
+<script>
+    const form = document.querySelector("form");
+    const spinner = document.getElementById("spinner");
+    const btn = document.getElementById("btnCrear");
+    if (form && spinner && btn) {
+        form.addEventListener("submit", function () {
+            btn.disabled = true;
+            setTimeout(() => {
+                spinner.classList.remove("d-none");
+                btn.disabled = false;
+            }, 2000);
+        });
+    }
+</script>

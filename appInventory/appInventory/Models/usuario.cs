@@ -11,8 +11,7 @@ namespace appInventory.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class usuario
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -23,24 +22,18 @@ namespace appInventory.Models
         }
     
         public int usuarioId { get; set; }
-        [Required(ErrorMessage = "El nombre es obligatorio.")]
         public string nombre { get; set; }
-        [Required(ErrorMessage = "El primer apellido es obligatorio.")]
         public string apellido1 { get; set; }
-        [Required(ErrorMessage = "El segundo apellido es obligatorio.")]
         public string apellido2 { get; set; }
-        [Required(ErrorMessage = "El correo electronico es obligatorio.")]
         public string correoElectronico { get; set; }
-        [Required(ErrorMessage = "El nombre de usuario es obligatorio.")]
         public string nombreUsuario { get; set; }
-        
         public string contrasennaUsuario { get; set; }
         public Nullable<int> rol_Id { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ingresoUsuario> ingresoUsuario { get; set; }
+        public virtual rol rol { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<movimiento> movimiento { get; set; }
-        public virtual rol rol { get; set; }
     }
 }
