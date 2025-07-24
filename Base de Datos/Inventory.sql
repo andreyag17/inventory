@@ -10,6 +10,7 @@ fechaIngreso DATETIME,
 fechaSalida DATETIME,
 creacionRegistro DATETIME,
 cantidad INT,
+sobrante INT
 tipoMovimiento INT,
 usuarioId int
 );
